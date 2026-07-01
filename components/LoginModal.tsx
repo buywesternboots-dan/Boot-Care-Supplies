@@ -8,7 +8,7 @@ type LoginModalProps = {
   onClose: () => void;
 };
 
-type Provider = 'google' | 'facebook' | 'reddit';
+type OAuthProvider = 'google' | 'facebook';
 
 export default function LoginModal({ onClose }: LoginModalProps) {
   const [email, setEmail] = useState('');
@@ -16,7 +16,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
   const [error, setError] = useState<string | null>(null);
   const supabase = getSupabaseBrowserClient();
 
-  async function signInWithProvider(provider: Provider) {
+  async function signInWithProvider(provider: OAuthProvider) {
     setError(null);
 
     if (!supabase) {
@@ -72,7 +72,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
           <button className="ghost-action" type="button" onClick={() => signInWithProvider('facebook')}>
             Continue with Facebook
           </button>
-          <button className="ghost-action" type="button" onClick={() => signInWithProvider('reddit')}>
+          <button className="ghost-action" type="button" onClick={() => setError('Reddit login needs a custom auth setup. Use email for now.')}>
             Continue with Reddit
           </button>
         </div>
