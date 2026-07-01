@@ -72,9 +72,6 @@ export default function LoginModal({ onClose }: LoginModalProps) {
           <button className="ghost-action" type="button" onClick={() => signInWithProvider('facebook')}>
             Continue with Facebook
           </button>
-          <button className="ghost-action" type="button" onClick={() => setError('Reddit login needs a custom auth setup. Use email for now.')}>
-            Continue with Reddit
-          </button>
         </div>
         <label className="field-label">
           Email
