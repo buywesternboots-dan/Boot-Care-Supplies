@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cowboy Boot Care Supply Order</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Monthly Community Supply Order</p>
+      <h1>Cowboy Boot Care Supplies</h1>
+      <p class="notice">Availability is not guaranteed. Items are first come, first served.</p>
+    </div>
+    <button id="cartButton" class="cart-button">Cart <span id="cartCount">0</span></button>
+  </header>
+
+  <main class="layout">
+    <section class="catalog-panel">
+      <div class="toolbar">
+        <input id="searchInput" type="search" placeholder="Search item number, brand, or product" />
+        <select id="categoryFilter">
+          <option value="all">All</option>
+          <option value="Care">Care</option>
+          <option value="Repair">Repair</option>
+          <option value="Accessories">Accessories</option>
+        </select>
+      </div>
+      <div id="productGrid" class="product-grid"></div>
+    </section>
+
+    <aside class="cart-panel" id="cartPanel">
+      <h2>Supply Request</h2>
+      <div id="cartItems" class="cart-items"></div>
+      <div class="totals">
+        <div><span>Subtotal</span><strong id="subtotal">$0.00</strong></div>
+        <div><span>Shipping</span><strong>TBD</strong></div>
+        <div><span>Tax</span><strong>$0.00</strong></div>
+        <div class="grand-total"><span>Total</span><strong id="total">$0.00</strong></div>
+      </div>
+      <label class="field">Name<input id="customerName" /></label>
+      <label class="field">Email<input id="customerEmail" type="email" /></label>
+      <label class="field">Payment Method
+        <select id="paymentMethod">
+          <option>Zelle</option>
+          <option>PayPal</option>
+          <option>Cash App</option>
+          <option>Other</option>
+        </select>
+      </label>
+      <button id="submitOrder" class="submit-button">Request Order</button>
+      <p class="fine-print">This submits a request only. Payment and availability must be confirmed.</p>
+    </aside>
+  </main>
+
+  <dialog id="confirmationDialog">
+    <h2>Request Created</h2>
+    <p id="confirmationText"></p>
+    <button onclick="this.closest('dialog').close()">Close</button>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
