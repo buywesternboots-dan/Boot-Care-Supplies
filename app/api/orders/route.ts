@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { products } from '@/lib/products';
+import { products, type Product } from '@/lib/products';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 type OrderItemInput = {
@@ -14,8 +14,35 @@ type OrderInput = {
   items: OrderItemInput[];
 };
 
+type OrderLine = {
+  product: Product;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+};
+
 function orderNumber() {
   return `REQ-${Date.now().toString().slice(-8)}`;
+}
+
+function toOrderLine(item: OrderItemInput): OrderLine | null {
+  const product = products.find((candidate) => candidate.id === item.productId);
+  const quantity = Number(item.quantity);
+
+  if (!product || !Number.isFinite(quantity) || quantity <= 0) {
+    return null;
+  }
+
+  return {
+    product,
+    quantity,
+    unitPrice: product.price,
+    lineTotal: Number((product.price * quantity).toFixed(2))
+  };
+}
+
+function isOrderLine(line: OrderLine | null): line is OrderLine {
+  return line !== null;
 }
 
 export async function POST(request: Request) {
@@ -29,23 +56,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Name and email are required.' }, { status: 400 });
   }
 
-  const lines = requestedItems
-    .map((item) => {
-      const product = products.find((candidate) => candidate.id === item.productId);
-      const quantity = Number(item.quantity);
-
-      if (!product || !Number.isFinite(quantity) || quantity <= 0) {
-        return null;
-      }
-
-      return {
-        product,
-        quantity,
-        unitPrice: product.price,
-        lineTotal: Number((product.price * quantity).toFixed(2))
-      };
-    })
-    .filter((line): line is NonNullable<typeof line> => Boolean(line));
+  const lines = requestedItems.map(toOrderLine).filter(isOrderLine);
 
   if (lines.length === 0) {
     return NextResponse.json({ error: 'Add at least one item.' }, { status: 400 });
